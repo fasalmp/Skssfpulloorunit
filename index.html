@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DARUL ARQAM ISLAMIC PRE SCHOOL</title>
+    <link rel="stylesheet" href="style.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        .skssf-unit {
+            display: inline-block;
+            font-size: 44px;
+            font-weight: bold;
+            animation: colorChange 3s infinite alternate, fadeInOut 3s infinite alternate;
+        }
+    
+        @keyframes colorChange {
+            0% {
+                color: #30c2e6; /* Starting color */
+            }
+            100% {
+                color: #097909; /* Ending color */
+            }
+            100% {
+                color: #fafafa; /* Ending color */
+            }
+        }
+    
+        @keyframes fadeInOut {
+            0%, 100% {
+                opacity: 0.5; /* Initial and final opacity */
+            }
+            50% {
+                opacity: 1; /* Midpoint opacity */
+            }
+        }
+    </style>
+    
+</head>
+
+<body>
+    <section class="w3l-signup">
+        <div class="overlay">
+            <div class="wrapper">
+                <div class="logo">
+                    <a class="brand-logo" href="index.html">
+                        <span class="skssf-unit">SKSSF Pulloor Unit</span>
+                    </a>
+                </div>
+                <div class="form-section">
+                    <h3>Apply Now</h3>
+                    <form id="submit-form" action="" class="signin-form">
+                        <div id="step1">
+                            <div class="form-input">
+                                
+                                <input type="text" class="form-control" id="name" name="name" required placeholder="നിങ്ങളുടെ പേര്">
+                            </div>
+                            <div class="form-input">
+                                <input type="text" class="form-control" id="mobile" name="mobile" required placeholder="മൊബൈൽ നമ്പർ">
+                            </div>
+                            <div class="form-group">
+                                <label>Category:</label>
+                                <select class="form-control" id="category" name="category" required>
+                                    <option value="">തിരഞ്ഞെടുക്കുക</option>
+                                    <option value="monthly">മാസത്തിൽ</option>
+                                    <option value="bimonthly">രണ്ടുമാസം കൂടുമ്പോൾ</option>
+                                    <option value="six-month">ആറുമാസത്തിൽ</option>
+                                    <option value="year">വർഷത്തിൽ</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="next1">Next</button>
+                        </div>
+                        <div id="step2" style="display: none;">
+                            <h5>Pricing Options</h5>
+                            <div id="pricing-options" class="form-group">
+                            </div>
+                            <br>
+                            <button type="button" class="btn btn-secondary" id="prev2">Previous</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        $(document).ready(function () {
+            const pricingOptionsByCategory = {
+                'monthly': ['30 വിദ്യാർത്ഥികൾക്ക്', '50', '100', 'other'],
+                'bimonthly': ['60 വിദ്യാർത്ഥികൾക്ക്', '100', '200', 'other'],
+                'six-month': ['140 വിദ്യാർത്ഥികൾക്ക്t', '600', '1200', 'other'],
+                'year': ['275 വിദ്യാർത്ഥികൾക്ക്', '950', '1900', 'other']
+            };
+
+            let currentStep = 1;
+
+            function showStep(step) {
+                $('#step1, #step2').hide();
+                $('#step' + step).show();
+            }
+
+            function generatePricingOptions(category) {
+                const pricingOptions = pricingOptionsByCategory[category];
+                $('#pricing-options').empty();
+
+                pricingOptions.forEach(option => {
+                    const value = option.split(' ')[0];
+                    const radio = `<div class="form-check">
+                        <input class="form-check-input" type="radio" name="pricing" value="${value}" id="${value}" required>
+                        <label class="form-check-label" for="${value}">${option}</label>
+                    </div>`;
+                    $('#pricing-options').append(radio);
+                });
+
+                // Add "Other" input box if necessary
+                if (pricingOptions.includes('other')) {
+                    const otherInput = `<div class="form-group">
+                        <label for="otherValue">Enter Other Amount:</label>
+                        <input type="number" class="form-control" id="otherValue" name="otherValue" step="any">
+                    </div>`;
+                    $('#pricing-options').append(otherInput);
+                }
+            }
+
+            $('#next1').click(function () {
+                const selectedCategory = $('#category').val();
+                generatePricingOptions(selectedCategory);
+
+                currentStep = 2;
+                showStep(currentStep);
+            });
+
+            $('#prev2').click(function () {
+                currentStep = 1;
+                showStep(currentStep);
+            });
+
+            showStep(currentStep);
+
+            $("#submit-form").submit((e) => {
+                e.preventDefault();
+                $.ajax({
+                    url: "https://script.google.com/macros/s/AKfycbwalYFasPen8m680ewM3CT1PsiHOKD1s4zZYhx6xEVHUDIZwQtYDwUPAfrP-jhHPsQE/exec",
+                    data: $("#submit-form").serialize(),
+                    method: "post",
+                    success: function (response) {
+                        alert("അല്ലാഹു നമ്മുടെ പ്രവർത്തനങ്ങൾ സ്വീകരിക്കട്ടെ");
+                        window.location.reload();
+                    },
+                    error: function (err) {
+                        alert("Something went wrong");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
