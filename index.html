@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>SKSSF PULLOOR UNIT</title>
+    <title>SKSSF PULLUR UNIT</title>
     <link rel="stylesheet" href="style.css" type="text/css" media="all" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -17,29 +17,39 @@
             font-weight: bold;
             animation: colorChange 3s infinite alternate, fadeInOut 3s infinite alternate;
         }
-    
+
         @keyframes colorChange {
             0% {
-                color: #30c2e6; /* Starting color */
+                color: #30c2e6;
+                /* Starting color */
             }
+
             100% {
-                color: #097909; /* Ending color */
+                color: #097909;
+                /* Ending color */
             }
+
             100% {
-                color: #fafafa; /* Ending color */
+                color: #fafafa;
+                /* Ending color */
             }
         }
-    
+
         @keyframes fadeInOut {
-            0%, 100% {
-                opacity: 0.5; /* Initial and final opacity */
+
+            0%,
+            100% {
+                opacity: 0.5;
+                /* Initial and final opacity */
             }
+
             50% {
-                opacity: 1; /* Midpoint opacity */
+                opacity: 1;
+                /* Midpoint opacity */
             }
         }
     </style>
-    
+
 </head>
 
 <body>
@@ -56,11 +66,13 @@
                     <form id="submit-form" action="" class="signin-form">
                         <div id="step1">
                             <div class="form-input">
-                                
-                                <input type="text" class="form-control" id="name" name="name" required placeholder="നിങ്ങളുടെ പേര്">
+
+                                <input type="text" class="form-control" id="name" name="name" required
+                                    placeholder="നിങ്ങളുടെ പേര്">
                             </div>
                             <div class="form-input">
-                                <input type="text" class="form-control" id="mobile" name="mobile" required placeholder="മൊബൈൽ നമ്പർ">
+                                <input type="text" class="form-control" id="mobile" name="mobile" required
+                                    placeholder="മൊബൈൽ നമ്പർ">
                             </div>
                             <div class="form-group">
                                 <label>Category:</label>
@@ -79,8 +91,13 @@
                             <div id="pricing-options" class="form-group">
                             </div>
                             <br>
-                            <button type="button" class="btn btn-secondary" id="prev2">Previous</button>
+
+                            <p>Payment Amount: <span id="paymentAmount"></span></p>
+
+
                             <button type="submit" class="btn btn-success">Submit</button>
+
+
                         </div>
                     </form>
                 </div>
@@ -94,7 +111,7 @@
                 'monthly': ['30 വിദ്യാർത്ഥികൾക്ക്', '50', '100', 'other'],
                 'bimonthly': ['60 വിദ്യാർത്ഥികൾക്ക്', '100', '200', 'other'],
                 'six-month': ['140 വിദ്യാർത്ഥികൾക്ക്t', '600', '1200', 'other'],
-                'year': ['275 വിദ്യാർത്ഥികൾക്ക്', '950', '1900', 'other']
+                'year': ['275 വിദ്യാർത്ഥികൾക്ക്', '1000', '2000', 'other']
             };
 
             let currentStep = 1;
@@ -142,22 +159,31 @@
 
             showStep(currentStep);
 
+
             $("#submit-form").submit((e) => {
                 e.preventDefault();
                 $.ajax({
                     url: "https://script.google.com/macros/s/AKfycbwalYFasPen8m680ewM3CT1PsiHOKD1s4zZYhx6xEVHUDIZwQtYDwUPAfrP-jhHPsQE/exec",
                     data: $("#submit-form").serialize(),
                     method: "post",
+                    // After a successful form submission
                     success: function (response) {
-                        alert("ഒന്ന് വെയിറ്റ് ചെയ്യുക");
-                        window.location.href = 'payment.html'
+                        alert("അല്ലാഹു നമ്മുടെ പ്രവർത്തനങ്ങൾ സ്വീകരിക്കട്ടെ");
+
+                        // Get the selected payment value
+                        const selectedPaymentValue = $('input[name="pricing"]:checked').val();
+
+                        // Redirect to payment.html with the payment value as a query parameter
+                        window.location.href = `payment.html?payment=${selectedPaymentValue}`;
                     },
+
                     error: function (err) {
                         alert("Something went wrong");
                     }
                 });
             });
-             
+
+
         });
     </script>
 </body>
