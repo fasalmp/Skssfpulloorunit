@@ -157,31 +157,7 @@
                     }
                 });
             });
-             $("#submit-form").submit((e) => {
-                e.preventDefault();
-
-                // Get the selected category and pricing option
-                const selectedCategory = $('#category').val();
-                const selectedPricing = $('input[name="pricing"]:checked').val();
-                const otherValue = $('#otherValue').val();
-
-                // Calculate the payment amount based on the selected values
-                let paymentAmount = 0;
-                if (selectedPricing === 'other') {
-                    paymentAmount = otherValue;
-                } else {
-                    paymentAmount = selectedPricing;
-                }
-
-                // Construct the payment URL with dynamic values
-                const paymentURL = `upi://pay?pa=fasalmppulloor@okaxis&pn=Muhammad%20fasal%20thangal&am=${paymentAmount}&cu=INR&aid=uGICAgICL2MWXDQ`;
-
-                // Set the action attribute of the form to the dynamic payment URL
-                $("#submit-form").attr("action", paymentURL);
-
-                // Submit the form
-                $("#submit-form")[0].submit();
-            });
+             
         });
     </script>
 </body>
