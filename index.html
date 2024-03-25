@@ -79,7 +79,6 @@
                                 <select class="form-control" id="category" name="category" required>
                                     <option value="">തിരഞ്ഞെടുക്കുക</option>
                                     <option value="monthly">മാസത്തിൽ</option>
-                                    <option value="bimonthly">രണ്ടുമാസം കൂടുമ്പോൾ</option>
                                     <option value="six-month">ആറുമാസത്തിൽ</option>
                                     <option value="year">വർഷത്തിൽ</option>
                                 </select>
@@ -94,9 +93,9 @@
                              <p>"Submit" ചെയ്ത ശേഷം അല്പനേരം വെയിറ്റ് ചെയ്യുക</p>
                             <p> Payment Amount: <span id="paymentAmount"></span></p>
 
-
+                             
                             <button type="submit" class="btn btn-success">Submit</button>
-
+                            <div id="loading-indicator" style="display: none;">Loading...</div>
 
                         </div>
                     </form>
@@ -108,23 +107,22 @@
     <script>
         $(document).ready(function () {
             const pricingOptionsByCategory = {
-                'monthly': ['30 വിദ്യാർത്ഥികൾക്ക്', '50', '100', 'other'],
-                'bimonthly': ['60 വിദ്യാർത്ഥികൾക്ക്', '100', '200', 'other'],
-                'six-month': ['140 വിദ്യാർത്ഥികൾക്ക്t', '600', '1200', 'other'],
-                'year': ['275 വിദ്യാർത്ഥികൾക്ക്', '1000', '2000', 'other']
+                'monthly': ['50', '100', 'other'],
+                'six-month': ['300', '600', 'other'],
+                'year': ['600', '1200', 'other']
             };
-
+    
             let currentStep = 1;
-
+    
             function showStep(step) {
                 $('#step1, #step2').hide();
                 $('#step' + step).show();
             }
-
+    
             function generatePricingOptions(category) {
                 const pricingOptions = pricingOptionsByCategory[category];
                 $('#pricing-options').empty();
-
+    
                 pricingOptions.forEach(option => {
                     const value = option.split(' ')[0];
                     const radio = `<div class="form-check">
@@ -133,59 +131,92 @@
                     </div>`;
                     $('#pricing-options').append(radio);
                 });
-
+    
                 // Add "Other" input box if necessary
                 if (pricingOptions.includes('other')) {
-                    const otherInput = `<div class="form-group">
+                    const otherInput = `<div class="form-group" id="otherAmountInput" style="display: none;">
                         <label for="otherValue">Enter Other Amount:</label>
-                        <input type="number" class="form-control" id="otherValue" name="otherValue" step="any">
+                        <input type="number" class="form-control" min="50" id="otherValue" name="otherValue" step="any">
                     </div>`;
                     $('#pricing-options').append(otherInput);
                 }
             }
-
+    
             $('#next1').click(function () {
                 const selectedCategory = $('#category').val();
                 generatePricingOptions(selectedCategory);
-
+    
                 currentStep = 2;
                 showStep(currentStep);
             });
-
+    
             $('#prev2').click(function () {
                 currentStep = 1;
                 showStep(currentStep);
             });
-
+    
             showStep(currentStep);
-
-
+    
+            const submitButton = $('#submit-button');
+            const loadingIndicator = $('#loading-indicator');
+    
+            // Function to show loading indicator and hide submit button
+            function showLoading() {
+                submitButton.hide();
+                loadingIndicator.show();
+            }
+    
+            // Function to hide loading indicator and show submit button
+            function hideLoading() {
+                loadingIndicator.hide();
+                submitButton.show();
+            }
+    
+            // Delegated event listener for radio inputs
+            $('#pricing-options').on('change', 'input[name="pricing"]', function() {
+                if ($(this).val() === 'other') {
+                    $('#otherAmountInput').show();
+                } else {
+                    $('#otherAmountInput').hide();
+                }
+            });
+    
             $("#submit-form").submit((e) => {
                 e.preventDefault();
+    
+                // Show loading indicator
+                showLoading();
+    
                 $.ajax({
                     url: "https://script.google.com/macros/s/AKfycbwalYFasPen8m680ewM3CT1PsiHOKD1s4zZYhx6xEVHUDIZwQtYDwUPAfrP-jhHPsQE/exec",
                     data: $("#submit-form").serialize(),
                     method: "post",
                     // After a successful form submission
                     success: function (response) {
-                        alert("അല്ലാഹു നമ്മുടെ പ്രവർത്തനങ്ങൾ സ്വീകരിക്കട്ടെ");
-
+                        
+    
                         // Get the selected payment value
                         const selectedPaymentValue = $('input[name="pricing"]:checked').val();
-
+    
+                        // Hide loading indicator
+                        hideLoading();
+    
                         // Redirect to payment.html with the payment value as a query parameter
                         window.location.href = `payment.html?payment=${selectedPaymentValue}`;
                     },
-
+    
                     error: function (err) {
                         alert("Something went wrong");
+                        // Hide loading indicator
+                        hideLoading();
                     }
                 });
             });
-
-
         });
     </script>
+    
+    
+    
 </body>
 
 </html>
